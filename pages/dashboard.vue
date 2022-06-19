@@ -7,7 +7,7 @@
             Total Saldo
           </div>
           <h3>
-            Rp 4.000.000
+            Rp{{ $utils.numberToLocaleString(total_balance) }}
           </h3>
         </div>
 
@@ -21,7 +21,7 @@
 
     <v-row>
       <v-col cols="12">
-        Chart
+        <TransactionHistoryChart />
       </v-col>
     </v-row>
 
@@ -40,7 +40,7 @@
                   </span>
                 </div>
                 <h2 class="mt-3">
-                  Rp 2.200.000
+                  Rp {{ $utils.numberToLocaleString(expense_this_month) }}
                 </h2>
               </v-col>
 
@@ -54,7 +54,7 @@
                   </span>
                 </div>
                 <h2 class="mt-3">
-                  Rp 2.200.000
+                  Rp {{ $utils.numberToLocaleString(income_this_month) }}
                 </h2>
               </v-col>
             </v-row>
@@ -77,8 +77,8 @@
       </v-col>
 
       <v-col cols="12" class="d-flex">
-        <template v-for="(account, i) of accounts">
-          <v-card :key="i" class="mr-3">
+        <template v-for="account of accounts">
+          <v-card :key="account.id" class="mr-3">
             <v-card-text class="d-flex">
               <div class="d-flex align-center justify-content-center">
                 <v-avatar>
@@ -88,11 +88,11 @@
 
               <div>
                 <div class="subtitle-1">
-                  {{ account.name }}
+                  {{ account.institution.name }}
                 </div>
 
                 <h3>
-                  Rp{{ numberToLocaleString(account.balance) }}
+                  Rp{{ $utils.numberToLocaleString(account.balance) }}
                 </h3>
               </div>
             </v-card-text>
@@ -130,7 +130,7 @@
                 <v-spacer />
 
                 <div class="success--text font-weight-bold">
-                  Rp{{ numberToLocaleString(200000) }}
+                  Rp{{ numberToLocaleString(income_last_month) }}
                 </div>
               </v-col>
             </v-row>
@@ -144,7 +144,7 @@
                 <v-spacer />
 
                 <div class="error--text font-weight-bold">
-                  Rp{{ numberToLocaleString(200000) }}
+                  Rp{{ numberToLocaleString(expense_last_month) }}
                 </div>
               </v-col>
             </v-row>
@@ -180,27 +180,46 @@
 </template>
 
 <script>
+import TransactionHistoryChart from '@/components/TransactionHistoryChart'
 export default {
   name: 'MainDashboard',
 
+  components: {
+    TransactionHistoryChart
+  },
+
   data: () => ({
-    accounts: [
-      {
-        name: 'GoPay',
-        balance: 1000000,
-        icon: null
-      },
-      {
-        name: 'BCA',
-        balance: 1000000,
-        icon: null
-      }
-    ]
+    accounts: [],
+    total_balance: 0,
+    income_this_month: 0,
+    expense_this_month: 0,
+    income_last_month: 0,
+    expense_last_month: 0
   }),
+
+  mounted () {
+    this.fetch()
+  },
 
   methods: {
     numberToLocaleString (number) {
       return Number(number).toLocaleString('id-id')
+    },
+
+    async fetch () {
+      try {
+        const { data } = await this.$axios.get('/inf/api/dashboard')
+
+        this.total_balance = data.data.total_balance
+        this.income_this_month = data.data.income_this_month
+        this.expense_this_month = data.data.expense_this_month
+        this.income_last_month = data.data.income_last_month
+        this.expense_last_month = data.data.expense_last_month
+        this.accounts = data.data.account
+        console.log(data.accounts)
+      } catch (e) {
+        console.log(e)
+      }
     }
   }
 }

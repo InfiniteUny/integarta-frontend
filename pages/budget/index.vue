@@ -2,7 +2,7 @@
   <div>
     <v-row>
       <v-col cols="12">
-        <PageTitle disable-back title="Kelola Anggaran"/>
+        <PageTitle disable-back title="Kelola Anggaran" />
       </v-col>
     </v-row>
 
@@ -16,7 +16,7 @@
           offset-y
           transition="scale-transition"
         >
-          <template v-slot:activator="{ on, attrs }">
+          <template #activator="{ on, attrs }">
             <v-chip outlined v-bind="attrs" v-on="on">
               <v-icon class="mr-3">
                 mdi-calendar
@@ -33,6 +33,7 @@
         <div>
           <div class="mx-auto" style="max-width: 200px; position: relative;">
             <DoughnutChart
+              v-if="!loading"
               :chart-data="chartData"
               :options="chartOptions"
               chart-id="chart-1"
@@ -51,7 +52,7 @@
               </h2>
 
               <div>
-                dari Rp {{$utils.numberToLocaleString(items[0] ? items[0].amount : 0) }}
+                dari Rp {{ $utils.numberToLocaleString(items[0] ? items[0].amount : 0) }}
               </div>
             </div>
           </div>
@@ -99,7 +100,7 @@
       </v-col>
     </v-row>
 
-    <v-fab-transition >
+    <v-fab-transition>
       <v-btn
         color="success"
         fab
@@ -117,7 +118,7 @@ import DoughnutChart from '@/components/chart/DoughnutChart'
 import PageTitle from '@/components/PageTitle'
 
 export default {
-  name: 'budget-index',
+  name: 'BudgetIndex',
 
   components: {
     PageTitle,
@@ -143,7 +144,8 @@ export default {
         display: false
       }
     },
-    items: []
+    items: [],
+    loading: false
   }),
 
   mounted () {
@@ -152,6 +154,7 @@ export default {
 
   methods: {
     async fetch () {
+      this.loading = true
       try {
         const { data } = await this.$axios.get('/inf/api/budget-list')
 
@@ -162,6 +165,8 @@ export default {
         this.chartData.datasets[0].data = [this.items[0].expense, this.items[0].amount]
       } catch (e) {
         console.error(e)
+      } finally {
+        this.loading = false
       }
     },
 
