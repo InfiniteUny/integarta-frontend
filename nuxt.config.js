@@ -86,7 +86,7 @@ export default {
           accent: '#B983FF',
           secondary: '#9A9A9A',
           // info: colors.teal.lighten1,
-          // warning: ,
+          warning: '#D4B533',
           error: '#FF6B6B',
           success: '#59A963'
         }
