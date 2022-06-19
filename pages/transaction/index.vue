@@ -2,7 +2,7 @@
   <div>
     <v-row>
       <v-col cols="12">
-        <PageTitle title="Riwayat Transaksi" disable-back />
+        <PageTitle disable-back title="Riwayat Transaksi"/>
       </v-col>
 
       <v-col cols="12">
@@ -12,7 +12,7 @@
           </div>
 
           <h1 class="primary--text text-center">
-            4.000.000
+            Rp {{ $utils.numberToLocaleString(total_balance) }}
           </h1>
         </div>
       </v-col>
@@ -27,7 +27,7 @@
                 </div>
 
                 <h2 class="success--text text-center">
-                  4.000.000
+                  Rp {{ $utils.numberToLocaleString(total_income) }}
                 </h2>
               </v-col>
 
@@ -37,7 +37,7 @@
                 </div>
 
                 <h2 class="error--text text-center">
-                  4.000.000
+                  Rp {{ $utils.numberToLocaleString(total_expense) }}
                 </h2>
               </v-col>
             </v-row>
@@ -56,14 +56,14 @@
             prepend-inner-icon="mdi-magnify"
             rounded
           />
-          <v-chip outlined large class="mr-3 flex-grow-0 flex-shrink-0">
+          <v-chip class="mr-3 flex-grow-0 flex-shrink-0" large outlined>
             <v-icon>
               mdi-filter
             </v-icon>
             Filter
           </v-chip>
 
-          <v-chip outlined large class="flex-grow-0 flex-shrink-0">
+          <v-chip class="flex-grow-0 flex-shrink-0" large outlined>
             <v-icon>
               mdi-download
             </v-icon>
@@ -71,20 +71,23 @@
           </v-chip>
         </div>
 
-        <v-data-table :headers="tableHeaders" :items="items" show-expand mobile-breakpoint="0">
-<!--          <template v-slot:expanded.item="{ headers, item }">-->
-<!--            <tr v-for="detail of item.details" :key="detail.id">-->
-<!--              <td>-->
-<!--                {{ detail.name }}-->
-<!--              </td>-->
-<!--              <td>-->
-<!--                {{ detail.income }}-->
-<!--              </td>-->
-<!--              <td>-->
-<!--                {{ detail.expense }}-->
-<!--              </td>-->
-<!--            </tr>-->
-<!--          </template>-->
+        <v-data-table
+          :headers="tableHeaders"
+          :items="items"
+          mobile-breakpoint="0"
+          group-by="date"
+        >
+          <template v-slot:item.income="{ item }">
+            <div class="success--text font-weight-bold">
+              Rp {{ $utils.numberToLocaleString(item.income) }}
+            </div>
+          </template>
+
+          <template v-slot:item.expense="{ item }">
+            <div class="error--text font-weight-bold">
+              Rp {{ $utils.numberToLocaleString(item.expense) }}
+            </div>
+          </template>
         </v-data-table>
       </v-col>
     </v-row>
@@ -93,6 +96,7 @@
 
 <script>
 import PageTitle from '@/components/PageTitle'
+
 export default {
   name: 'TransactionHistory',
 
@@ -102,51 +106,42 @@ export default {
 
   data: () => ({
     tableHeaders: [
-      { text: '', value: 'date' },
+      { text: '', value: 'date', groupable: true },
+      { text: '', value: 'description' },
       { text: 'Pemasukan', value: 'income' },
       { text: 'Pengeluaran', value: 'expense' }
     ],
-    items: [
-      {
-        date: '2020-03-04',
-        income: 200000,
-        expense: 200000,
-        details: [
-          {
-            id: 1,
-            name: 'Makan Soto',
-            income: 200000,
-            expense: 200000
-          },
-          {
-            id: 2,
-            name: 'Makan Soto',
-            income: 200000,
-            expense: 200000
-          }
-        ]
-      },
-      {
-        date: '2020-03-04',
-        income: 200000,
-        expense: 200000,
-        details: [
-          {
-            id: 3,
-            name: 'Makan Soto',
-            income: 200000,
-            expense: 200000
-          },
-          {
-            id: 4,
-            name: 'Makan Soto',
-            income: 200000,
-            expense: 200000
-          }
-        ]
+    items: [],
+    total_balance: 0,
+    total_expense: 0,
+    total_income: 0
+  }),
+
+  mounted () {
+    this.fetch()
+  },
+
+  methods: {
+    async fetch () {
+      try {
+        const { data } = await this.$axios.get('/inf/api/transactionHistory')
+
+        this.items = data.data.transaction_history.map(item => ({
+          date: item.date,
+          id: item.id,
+          description: item.description,
+          income: item.direction === 'in' ? item.amount : 0,
+          expense: item.direction === 'out' ? item.amount : 0
+        }))
+
+        this.total_balance = data.data.total_balance
+        this.total_income = this.items.reduce((a, item) => (Number(item.income) + a), 0)
+        this.total_expense = this.items.reduce((a, item) => (Number(item.expense) + a), 0)
+      } catch (e) {
+        console.log(e)
       }
-    ]
-  })
+    }
+  }
 }
 </script>
 
