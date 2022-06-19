@@ -98,6 +98,17 @@
         </template>
       </v-col>
     </v-row>
+
+    <v-fab-transition >
+      <v-btn
+        color="success"
+        fab
+        style="position: fixed; right: 10px; bottom: 66px;"
+        to="/budget/add"
+      >
+        <v-icon>mdi-plus</v-icon>
+      </v-btn>
+    </v-fab-transition>
   </div>
 </template>
 

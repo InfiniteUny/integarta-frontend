@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="position: relative; height: 100%;">
     <v-row>
       <v-col cols="12">
         <PageTitle disable-back title="Tujuan Tabungan"/>
@@ -51,6 +51,17 @@
         </template>
       </v-col>
     </v-row>
+
+    <v-fab-transition >
+      <v-btn
+        color="success"
+        fab
+        style="position: fixed; right: 10px; bottom: 66px;"
+        to="/savings/add-target"
+      >
+        <v-icon>mdi-plus</v-icon>
+      </v-btn>
+    </v-fab-transition>
   </div>
 </template>
 
