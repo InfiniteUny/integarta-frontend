@@ -47,11 +47,11 @@
               </div>
 
               <h2 style="" class="font-weight-bold">
-                Rp 200.000
+                Rp {{ $utils.numberToLocaleString(items[0] ? items[0].expense : 0) }}
               </h2>
 
               <div>
-                dari Rp700.000
+                dari Rp {{$utils.numberToLocaleString(items[0] ? items[0].amount : 0) }}
               </div>
             </div>
           </div>
@@ -78,11 +78,11 @@
             class="mb-3 pa-3"
           >
             <div style="font-size: 16px;" class="font-weight-bold">
-              Anggaran Bulan {{ toMonthName(`${item.year}-${item.month}`) }}
+              Anggaran Bulan {{ toMonthName(item.months) }}
             </div>
 
             <div style="font-size: 13px;">
-              {{ toMonthName(item.month) }} {{ item.year}} / {{ getDaysRemaining(item.year, item.month) || 'Selesai' }}
+              {{ toMonthName(item.months.substring(4)) }} {{ item.months.substring(0, 4) }} / {{ getDaysRemaining(item.months) || 'Selesai' }}
             </div>
 
             <v-progress-linear class="my-1" height="10" rounded color="accent" :value="getExpensePercentage(item)" />
@@ -92,7 +92,7 @@
             </div>
 
             <div class="subtitle-1">
-              Rp{{ $utils.numberToLocaleString(item.expense) }} dari Rp{{ $utils.numberToLocaleString(item.total_budget) }}
+              Rp{{ $utils.numberToLocaleString(item.expense) }} dari Rp{{ $utils.numberToLocaleString(item.amount) }}
             </div>
           </v-sheet>
         </template>
@@ -125,7 +125,7 @@ export default {
   },
 
   data: () => ({
-    month: null,
+    month: 5,
     monthPicker: null,
     chartData: {
       labels: ['Terpakai', 'Sisa'],
@@ -143,39 +143,28 @@ export default {
         display: false
       }
     },
-    items: [
-      {
-        id: 1,
-        month: 1,
-        year: 2022,
-        total_budget: 200000,
-        expense: 100000
-      },
-      {
-        id: 2,
-        month: 2,
-        year: 2022,
-        total_budget: 200000,
-        expense: 100000
-      },
-      {
-        id: 3,
-        month: 3,
-        year: 2022,
-        total_budget: 200000,
-        expense: 100000
-      },
-      {
-        id: 4,
-        month: 8,
-        year: 2022,
-        total_budget: 200000,
-        expense: 100000
-      }
-    ]
+    items: []
   }),
 
+  mounted () {
+    this.fetch()
+  },
+
   methods: {
+    async fetch () {
+      try {
+        const { data } = await this.$axios.get('/inf/api/budget-list')
+
+        this.items = data.data.budget.map((item) => {
+          item.expense = data.data.expenses.find(v => v.months === item.months)?.expenses || 0
+          return item
+        })
+        this.chartData.datasets[0].data = [this.items[0].expense, this.items[0].amount]
+      } catch (e) {
+        console.error(e)
+      }
+    },
+
     toMonthName (dateString) {
       const date = new Date(dateString)
 
@@ -184,9 +173,9 @@ export default {
       })
     },
 
-    getDaysRemaining (year, month) {
+    getDaysRemaining (dateString) {
       const now = new Date()
-      const budgetDate = new Date(`${year}-${month}`)
+      const budgetDate = new Date(dateString)
       if (Date.parse(budgetDate) < Date.parse(now)) {
         return null
       }
@@ -198,7 +187,7 @@ export default {
     },
 
     getExpensePercentage (item) {
-      return Math.floor((item.expense / item.total_budget) * 100)
+      return Math.floor((item.expense / item.amount) * 100)
     }
   }
 }
