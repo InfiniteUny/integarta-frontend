@@ -8,11 +8,11 @@
 
     <v-row>
       <v-col cols="12" class="py-0">
-        <v-chip outlined v-bind="attrs" v-on="on">
+        <v-chip outlined @click="$router.push('/savings/edit-savings-amount')">
           <v-icon class="mr-3">
             mdi-calendar
           </v-icon>
-          Bulan {{ toMonthName(month) }}
+          Edit Frekuensi Nabung
         </v-chip>
 
         <div class="text-center mt-3">
