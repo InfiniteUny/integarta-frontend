@@ -2,7 +2,7 @@
   <div style="position: relative; height: 100%;">
     <v-row>
       <v-col cols="12">
-        <PageTitle disable-back title="Tujuan Tabungan"/>
+        <PageTitle disable-back title="Tujuan Tabungan" />
       </v-col>
     </v-row>
 
@@ -17,7 +17,9 @@
 
         <div class="text-center mt-3">
           <div>Frekuensi Nabung</div>
-          <h1 class="primary--text">Rp 100.000/bulan</h1>
+          <h1 class="primary--text">
+            Rp 1.000.000/bulan
+          </h1>
         </div>
       </v-col>
     </v-row>
@@ -31,11 +33,11 @@
             class="mb-3 pa-3"
           >
             <div style="font-size: 16px;" class="font-weight-bold">
-              {{ item.name}}
+              {{ item.name }}
             </div>
 
             <div style="font-size: 13px;">
-              {{ item.remaining_days }} hari lagi
+              {{ item.days }} hari lagi
             </div>
 
             <v-progress-linear class="my-1" height="10" rounded color="accent" :value="getExpensePercentage(item)" />
@@ -52,7 +54,7 @@
       </v-col>
     </v-row>
 
-    <v-fab-transition >
+    <v-fab-transition>
       <v-btn
         color="success"
         fab
@@ -69,44 +71,19 @@
 import PageTitle from '@/components/PageTitle'
 
 export default {
-  name: 'budget-index',
+  name: 'BudgetIndex',
 
   components: {
     PageTitle
   },
 
   data: () => ({
-    items: [
-      {
-        id: 1,
-        name: 'Macbook Pro',
-        remaining_days: 90,
-        expense: 15000000,
-        temp_expense: 14000000
-      },
-      {
-        id: 2,
-        name: 'Macbook Pro',
-        remaining_days: 90,
-        expense: 15000000,
-        temp_expense: 14000000
-      },
-      {
-        id: 3,
-        name: 'Macbook Pro',
-        remaining_days: 90,
-        expense: 15000000,
-        temp_expense: 14000000
-      },
-      {
-        id: 4,
-        name: 'Macbook Pro',
-        remaining_days: 90,
-        expense: 15000000,
-        temp_expense: 14000000
-      }
-    ]
+    items: []
   }),
+
+  mounted () {
+    this.fetch()
+  },
 
   methods: {
     toMonthName (dateString) {
@@ -132,6 +109,27 @@ export default {
 
     getExpensePercentage (item) {
       return Math.floor((item.temp_expense / item.expense) * 100)
+    },
+
+    async fetch () {
+      this.loading = true
+      try {
+        const { data } = await this.$axios.get('/inf/api/target-list')
+
+        this.items = data.data.target.map(item => ({
+          id: item.id,
+          name: item.name,
+          expense: Number(item.expense),
+          daily_payment: Number(item.daily_payment),
+          percentage: Number(item.percentage),
+          temp_expense: Number(item.temp_expense),
+          temp_percentage: Number(item.temp_percentage)
+        }))
+
+        this.$utils.getDays(this.items)
+      } catch (e) {
+        console.error(e)
+      }
     }
   }
 }
