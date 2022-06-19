@@ -1,8 +1,6 @@
 <template>
-  <v-row>
-    <v-form ref="form">
-      <v-col cols="12" />
-
+  <div>
+    <v-row>
       <v-col cols="12">
         <div class="title">
           Daftar
@@ -14,32 +12,48 @@
       </v-col>
 
       <v-col cols="12">
-        <label for="form-email">Email</label>
-        <v-text-field
-          id="form-email"
-          prepend-inner-icon="mdi-email"
-          type="email"
-          outlined
-          placeholder="Ketik disini"
-        />
+        <v-form ref="form">
+          <label for="form-email">Nama</label>
+          <v-text-field
+            id="form-name"
+            v-model="form.name"
+            outlined
+            placeholder="Ketik disini"
+            prepend-inner-icon="mdi-account"
+            type="text"
+          />
 
-        <label for="form-email">Password</label>
-        <v-text-field
-          id="form-password"
-          prepend-inner-icon="mdi-lock"
-          type="password"
-          outlined
-          placeholder="Ketik disini"
-        />
+          <label for="form-email">Email</label>
+          <v-text-field
+            id="form-email"
+            v-model="form.email"
+            outlined
+            placeholder="Ketik disini"
+            prepend-inner-icon="mdi-email"
+            type="email"
+          />
 
-        <label for="form-email">Konfirmasi Password</label>
-        <v-text-field
-          id="form-confirm-password"
-          prepend-inner-icon="mdi-lock"
-          type="password"
-          outlined
-          placeholder="Ketik disini"
-        />
+          <label for="form-email">Password</label>
+          <v-text-field
+            id="form-password"
+            v-model="form.password"
+            outlined
+            placeholder="Ketik disini"
+            prepend-inner-icon="mdi-lock"
+            type="password"
+          />
+
+          <label for="form-email">Konfirmasi Password</label>
+          <v-text-field
+            id="form-confirm-password"
+            v-model="form.password_confirmation"
+            outlined
+            placeholder="Ketik disini"
+            prepend-inner-icon="mdi-lock"
+            :rules="[v => form.password === form.password_confirmation || 'Password tidak sama']"
+            type="password"
+          />
+        </v-form>
 
         <div class="text-right">
           <a href="/forgot-password">
@@ -49,7 +63,7 @@
       </v-col>
 
       <v-col cols="12">
-        <v-btn block color="accent">
+        <v-btn block color="accent" :loading="loading" @click="register">
           Daftar
         </v-btn>
         <div class="text-center my-3">
@@ -66,13 +80,44 @@
           Sudah punya akun? <a href="/login">Masuk</a>
         </div>
       </v-col>
-    </v-form>
-  </v-row>
+    </v-row>
+  </div>
 </template>
 
 <script>
 export default {
-  name: 'AuthRegister'
+  name: 'AuthRegister',
+
+  data: () => ({
+    form: {
+      name: null,
+      email: null,
+      password: null,
+      password_confirmation: null
+    },
+    loading: false
+  }),
+
+  methods: {
+    async register () {
+      this.loading = true
+      try {
+        const { status, data } = await this.$axios.post('/inf/api/auth/register', {
+          name: this.form.name,
+          email: this.form.email,
+          password: this.form.password,
+          password_confirmation: this.form.password_confirmation
+        })
+
+        console.log(status, data)
+        this.$router.push('/login')
+      } catch (e) {
+        console.log(e)
+      } finally {
+        this.loading = false
+      }
+    }
+  }
 }
 </script>
 

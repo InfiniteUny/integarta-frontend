@@ -19,6 +19,7 @@
           id="form-email"
           prepend-inner-icon="mdi-email"
           type="email"
+          v-model="form.email"
           outlined
           placeholder="Ketik disini"
         />
@@ -29,6 +30,7 @@
           prepend-inner-icon="mdi-lock"
           type="password"
           outlined
+          v-model="form.password"
           placeholder="Ketik disini"
         />
 
@@ -40,7 +42,7 @@
       </v-col>
 
       <v-col cols="12">
-        <v-btn block color="accent">
+        <v-btn block color="accent" :loading="loading" @click="login">
           Masuk
         </v-btn>
         <div class="text-center my-3">
@@ -63,7 +65,38 @@
 
 <script>
 export default {
-  name: 'AuthLogin'
+  name: 'AuthLogin',
+
+  data: () => ({
+    form: {
+      email: '',
+      password: ''
+    },
+    loading: false
+  }),
+
+  methods: {
+    login () {
+      this.loading = true
+
+      this.$axios.get('/inf/sanctum/csrf-cookie', {
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest'
+        },
+        withCredentials: true
+      })
+        .then(() => {
+          this.$auth.loginWith('local', {
+            data: {
+              email: this.form.email,
+              password: this.form.password
+            }
+          }).then(() => {
+            this.$router.push('/dashboard')
+          })
+        })
+    }
+  }
 }
 </script>
 
