@@ -2,7 +2,7 @@
   <div>
     <v-row>
       <v-col cols="12">
-        <PageTitle title="Tambah Anggaran"/>
+        <PageTitle title="Tambah Anggaran" />
       </v-col>
     </v-row>
 
@@ -25,7 +25,7 @@
           offset-y
           transition="scale-transition"
         >
-          <template v-slot:activator="{ on, attrs }">
+          <template #activator="{ on, attrs }">
             <v-text-field
               v-model="form.month"
               append-icon="mdi-calendar"
@@ -63,7 +63,7 @@
 import PageTitle from '@/components/PageTitle'
 
 export default {
-  name: 'add-budget',
+  name: 'AddBudget',
 
   component: {
     PageTitle

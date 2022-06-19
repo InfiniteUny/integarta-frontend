@@ -35,7 +35,7 @@
 import PageTitle from '@/components/PageTitle'
 
 export default {
-  name: 'savings-edit-amount',
+  name: 'SavingsEditAmount',
 
   components: {
     PageTitle

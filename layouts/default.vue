@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-main style="background: #f9f9f9; max-height: 100vh; min-height: 100vh;">
-      <v-container style="max-height: calc(100% - 56px); min-height: calc(100% - 56px); overflow-x: hidden; overflow-y: hidden">
+      <v-container style="max-height: calc(100% - 56px); min-height: calc(100% - 56px); overflow-y: scroll;">
         <Nuxt />
       </v-container>
 

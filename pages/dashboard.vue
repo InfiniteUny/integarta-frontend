@@ -71,8 +71,8 @@
 
         <v-spacer />
 
-        <a href="/accounts">
-          Lihat Semua
+        <a href="/account">
+          Kelola Akun
         </a>
       </v-col>
 

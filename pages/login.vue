@@ -17,9 +17,9 @@
         <label for="form-email">Email</label>
         <v-text-field
           id="form-email"
+          v-model="form.email"
           prepend-inner-icon="mdi-email"
           type="email"
-          v-model="form.email"
           outlined
           placeholder="Ketik disini"
         />
@@ -27,10 +27,10 @@
         <label for="form-password">Password</label>
         <v-text-field
           id="form-password"
+          v-model="form.password"
           prepend-inner-icon="mdi-lock"
           type="password"
           outlined
-          v-model="form.password"
           placeholder="Ketik disini"
         />
 

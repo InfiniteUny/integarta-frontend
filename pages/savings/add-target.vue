@@ -18,8 +18,8 @@
           <label for="form-frequency">Kebutuhan</label>
           <v-text-field
             id="form-frequency"
-            type="number"
             v-model="form.amount"
+            type="number"
             outlined
           />
 
@@ -28,19 +28,20 @@
               <label for="form-percentage">Persentase</label>
               <v-text-field
                 id="form-percentage"
+                v-model="form.percentage"
                 type="number"
                 outlined
-                v-model="form.percentage"
               />
             </v-col>
 
             <v-col cols="6" class="py-0 pl-2">
-              <label for="form-temp_expense">Persentase</label>
+              <label for="form-temp_expense">Nominal</label>
               <v-text-field
                 id="form-temp_expense"
+                v-model="form.temp_expense"
+                disabled
                 type="number"
                 outlined
-                v-model="form.temp_expense"
               />
             </v-col>
           </v-row>
@@ -58,7 +59,7 @@
 import PageTitle from '@/components/PageTitle'
 
 export default {
-  name: 'savings-add-target',
+  name: 'SavingsAddTarget',
 
   components: {
     PageTitle
@@ -69,7 +70,7 @@ export default {
       name: null,
       amount: null,
       percentage: 0,
-      temp_expense: 100
+      temp_expense: 0
     }
   })
 }

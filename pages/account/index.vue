@@ -2,7 +2,7 @@
   <div>
     <v-row>
       <v-col cols="12">
-        <PageTitle title="Akunmu"/>
+        <PageTitle title="Akunmu" />
       </v-col>
     </v-row>
 
@@ -20,6 +20,7 @@
           class="mb-3 d-flex align-center pa-2"
           outlined
           rounded
+          @click="$router.push('/account/add-internet-banking')"
           style="width: 100%"
         >
           <div>
@@ -59,7 +60,7 @@
 import PageTitle from '@/components/PageTitle'
 
 export default {
-  name: 'your-account',
+  name: 'YourAccount',
 
   component: {
     PageTitle
@@ -73,27 +74,39 @@ export default {
     ],
 
     accounts: [
-      {
-        id: 1,
-        name: 'Bank BCA',
-        connected: true,
-        icon: ''
-      },
+      // {
+      //   id: 1,
+      //   name: 'Bank BCA',
+      //   connected: true,
+      //   icon: ''
+      // },
+      // {
+      //   id: 2,
+      //   name: 'Bank Mandiri',
+      //   connected: true,
+      //   icon: ''
+      // },
+      // {
+      //   id: 3,
+      //   name: 'Bank BRI',
+      //   connected: false,
+      //   icon: ''
+      // },
+      // {
+      //   id: 4,
+      //   name: 'Bank BNI',
+      //   connected: false,
+      //   icon: ''
+      // }
       {
         id: 2,
-        name: 'Bank Mandiri',
+        name: 'GoPay',
         connected: true,
         icon: ''
       },
       {
-        id: 3,
-        name: 'Bank BRI',
-        connected: false,
-        icon: ''
-      },
-      {
-        id: 4,
-        name: 'Bank BNI',
+        id: 1,
+        name: 'OVO',
         connected: false,
         icon: ''
       }

@@ -2,7 +2,7 @@
   <div>
     <v-row>
       <v-col cols="12">
-        <PageTitle title="Internet Banking"/>
+        <PageTitle title="E-Wallet" />
       </v-col>
     </v-row>
 
@@ -14,7 +14,7 @@
           </v-avatar>
 
           <div class="d-flex align-center font-weight-bold ml-3" style="font-size: 14px;">
-            Bank BRI
+            OVO
           </div>
         </v-sheet>
       </v-col>
@@ -23,7 +23,7 @@
     <v-row>
       <v-col cols="12">
         <v-form>
-          <label class="font-weight-medium" for="form-userid" style="font-size: 14px;">User ID</label>
+          <label class="font-weight-medium" for="form-userid" style="font-size: 14px;">Nomor Telepon</label>
           <v-text-field
             class="mb-3"
             hide-details
@@ -32,7 +32,7 @@
             prepend-inner-icon="mdi-account"
           />
 
-          <label class="font-weight-medium" for="form-password" style="font-size: 14px;">Password</label>
+          <label class="font-weight-medium" for="form-password" style="font-size: 14px;">OTP</label>
           <v-text-field
             hide-details
             outlined
@@ -53,7 +53,7 @@
 import PageTitle from '@/components/PageTitle'
 
 export default {
-  name: 'accountAddInternetBanking',
+  name: 'AccountAddInternetBanking',
 
   component: {
     PageTitle

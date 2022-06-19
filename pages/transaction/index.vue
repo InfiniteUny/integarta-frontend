@@ -2,7 +2,7 @@
   <div>
     <v-row>
       <v-col cols="12">
-        <PageTitle disable-back title="Riwayat Transaksi"/>
+        <PageTitle disable-back title="Riwayat Transaksi" />
       </v-col>
 
       <v-col cols="12">
@@ -77,13 +77,13 @@
           mobile-breakpoint="0"
           group-by="date"
         >
-          <template v-slot:item.income="{ item }">
+          <template #item.income="{ item }">
             <div class="success--text font-weight-bold">
               Rp {{ $utils.numberToLocaleString(item.income) }}
             </div>
           </template>
 
-          <template v-slot:item.expense="{ item }">
+          <template #item.expense="{ item }">
             <div class="error--text font-weight-bold">
               Rp {{ $utils.numberToLocaleString(item.expense) }}
             </div>

@@ -25,7 +25,7 @@
 <script>
 import PageTitle from '@/components/PageTitle'
 export default {
-  name: 'add-transaction',
+  name: 'AddTransaction',
 
   component: {
     PageTitle
