@@ -39,7 +39,9 @@
                     Pengeluaran
                   </span>
                 </div>
-                <h2 class="mt-3">Rp 2.200.000</h2>
+                <h2 class="mt-3">
+                  Rp 2.200.000
+                </h2>
               </v-col>
 
               <v-col cols="6">
@@ -51,7 +53,9 @@
                     Pemasukan
                   </span>
                 </div>
-                <h2 class="mt-3">Rp 2.200.000</h2>
+                <h2 class="mt-3">
+                  Rp 2.200.000
+                </h2>
               </v-col>
             </v-row>
           </v-card-text>
@@ -98,23 +102,23 @@
     </v-row>
 
     <v-row>
-      <v-col cols="12">
+      <v-col cols="12" class="pb-0">
         <h3>
           Laporan Keuangan
         </h3>
 
         <v-chip-group active-class="primary">
-          <v-chip outlined>
+          <v-chip outlined large>
             Bulan Ini
           </v-chip>
 
-          <v-chip outlined>
+          <v-chip outlined large>
             Bulan Lalu
           </v-chip>
         </v-chip-group>
       </v-col>
 
-      <v-col cols="12">
+      <v-col cols="12" class="pt-0">
         <v-card>
           <v-card-text class="subtitle-1">
             <v-row>
@@ -177,7 +181,7 @@
 
 <script>
 export default {
-  name: 'mainDashboard',
+  name: 'MainDashboard',
 
   data: () => ({
     accounts: [
