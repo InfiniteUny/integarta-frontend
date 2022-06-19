@@ -1,5 +1,4 @@
-import 'dotenv'
-
+require('dotenv')
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -20,7 +19,32 @@ export default {
     strategies: {
       laravelSanctum: {
         provider: 'laravel/sanctum',
-        url: process.env.SERVER_URL
+        url: '/inf'
+      },
+      local: {
+        endpoints: {
+          login: {
+            url: '/inf/api/auth/login',
+            method: 'post',
+            withCredentials: true,
+            headers: {
+              'X-Requested-With': 'XMLHttpRequest',
+              'Content-Type': 'application/json'
+            }
+          },
+          user: {
+            url: '/inf/api/user',
+            method: 'get',
+            propertyName: false,
+            withCredentials: true,
+            headers: {
+              'X-Requested-With': 'XMLHttpRequest',
+              'Content-Type': 'application/json'
+            }
+          }
+        },
+        tokenRequired: false,
+        tokenType: false
       }
     }
   },
@@ -60,11 +84,17 @@ export default {
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
     proxy: true,
+    proxyHeaders: false,
     credentials: true
   },
 
   proxy: {
-    '/api/': { target: process.env.SERVER_URL, pathRewrite: { '^/api/': '' } }
+    '/inf/': {
+      target: process.env.SERVER_URL,
+      pathRewrite: {
+        '^/inf/': '/'
+      }
+    }
   },
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
